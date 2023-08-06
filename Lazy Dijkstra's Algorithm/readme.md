@@ -1,66 +1,54 @@
-# Lazy Dijkstra's Algorithm
+# Lazy Dijkstra's Algorithm with Shortest Path
 
-Dijkstra's algorithm is a famous algorithm used to find the shortest path between a starting node and all other nodes in a weighted graph. The algorithm works by iteratively selecting the node with the smallest distance from the starting node and updating the distances of its neighboring nodes. Lazy Dijkstra's algorithm is a variation of the classic Dijkstra's algorithm that uses a priority queue to efficiently select the node with the minimum distance.
+Dijkstra's algorithm is a widely used graph traversal algorithm that finds the shortest path from a starting node to all other nodes in a weighted graph. The classic implementation of Dijkstra's algorithm eagerly updates the priority queue to find the shortest distances efficiently. However, the "lazy" version of Dijkstra's algorithm, as shown in the provided Python code, optimizes this process by delaying updates to the priority queue until they are required.
 
-## Lazy Dijkstra's Algorithm Explanation
+## Lazy Dijkstra's Algorithm
 
 1. Initialize a dictionary `results` with all nodes having a distance of infinity, except for the starting node, which has a distance of 0.
 
 2. Create an empty set `visited` to keep track of the nodes that have been visited.
 
-3. Set the distance of the starting node to 0 in the `results` dictionary.
+3. Create a dictionary `prev` to keep track of the previous node in the shortest path for each node. Initialize all values in `prev` to None.
 
-4. Initialize a priority queue `priority_q` with the starting node and its distance as the first element.
+4. Set the distance of the starting node to 0 in the `results` dictionary.
 
-5. While the priority queue is not empty, repeat the following steps:
+5. Initialize a priority queue `priority_q` with the starting node and its distance as the first element.
 
+6. While the priority queue is not empty, repeat the following steps:
    a. Select the node with the minimum distance from the priority queue using the `min` function with a custom lambda function.
-
    b. Remove the selected node from the priority queue.
-
    c. Add the selected node to the `visited` set.
 
-6. Iterate through the neighbors of the selected node:
-
+7. Iterate through the neighbors of the selected node:
    a. If the neighbor is already visited, continue to the next neighbor.
+   b. If the new distance from the starting node to the neighbor is not better than the current distance, continue to the next neighbor.
+   c. Update the distance of the neighbor in the `results` dictionary with the new distance.
+   d. Update the previous node for the neighbor in the `prev` dictionary to be the selected node.
+   e. Add the neighbor and its updated distance to the priority queue.
 
-   b. Calculate the new distance from the starting node to the neighbor by adding the distance from the current node to the neighbor's weight.
+8. If the goal is only to find the shortest path between two specific nodes, we can return early as soon as the end node is visited. This optimization can substantially cut the computation time in some cases.
 
-   c. Update the distance of the neighbor in the `results` dictionary with the minimum of the current distance and the newly calculated distance.
+9. Finally, return the `results` dictionary containing the shortest distance from the starting node to all other nodes and the `prev` dictionary containing the previous node in the shortest path for each node.
 
-   d. Add the neighbor and its updated distance to the priority queue.
+## Shortest Path Calculation
 
-7. Finally, return the `results` dictionary containing the shortest distance from the starting node to all other nodes.
+The provided implementation includes an additional function, `findShortestPath`, to find the actual shortest path between a starting node and an end node after running the lazy Dijkstra's algorithm.
 
-## Implementation Explanation
+1. Call the `lazyDejkstras` function to get the `results` and `prev` dictionaries.
 
-The provided Python implementation demonstrates the lazy Dijkstra's algorithm. Here's how it works:
+2. If the shortest distance from the starting node to the end node is `float('inf')`, it means there is no path, so return an empty path.
 
-1. The `lazyDejkstras` function takes the graph (in the form of an adjacency list) and the starting node as input and returns a dictionary containing the shortest distance from the starting node to all other nodes.
+3. Otherwise, initialize an empty list `path` to store the nodes in the shortest path.
 
-2. The algorithm uses a priority queue to efficiently select the node with the minimum distance. The priority queue is represented as a list of nodes, where each node is a list containing the node number and its corresponding distance from the starting node.
+4. Starting from the end node, iterate through the `prev` dictionary to backtrack the shortest path by finding the previous node until reaching the starting node.
 
-3. The algorithm starts by initializing the `results` dictionary with all nodes having a distance of infinity, except for the starting node, which has a distance of 0.
+5. Insert each node in the path list at the beginning, as we are backtracking from the end to the start.
 
-4. It then creates an empty set `visited` to keep track of the nodes that have been visited.
+6. Return the path list containing the shortest path from the starting node to the end node.
 
-5. The starting node is added to the priority queue with a distance of 0.
+## Example
 
-6. The main loop runs while the priority queue is not empty. In each iteration, the algorithm selects the node with the minimum distance from the priority queue using the `min` function.
-
-7. The selected node is removed from the priority queue and added to the `visited` set.
-
-8. The algorithm iterates through the neighbors of the selected node and updates their distances in the `results` dictionary if a shorter path is found.
-
-9. If a neighbor is already visited, it is skipped to avoid unnecessary calculations.
-
-10. The algorithm continues to explore the graph until all reachable nodes are visited.
-
-11. Finally, the `results` dictionary containing the shortest distances from the starting node to all other nodes is returned.
-
-## Example Output
-
-For the provided graph:
+Consider the following graph represented as a dictionary:
 
 ```python
 graph = {
@@ -72,10 +60,12 @@ graph = {
 }
 ```
 
-The output of the `lazyDejkstras(graph, 0)` call would be:
+Using the `findShortestPath` function with `start=0` and `end=4`, we can find the shortest path from node 0 to node 4:
 
 ```python
-{0: 0, 1: 3, 2: 1, 3: 4, 4: 7}
+path = findShortestPath(graph, 0, 4)
+print(path)
+# Output: [0, 2, 1, 3, 4]
 ```
 
-This indicates that the shortest distance from node 0 to node 1 is 3, to node 2 is 1, to node 3 is 4, and to node 4 is 7.
+In this example, the shortest path from node 0 to node 4 is [0, 2, 1, 3, 4]. If the goal is only to find the shortest path between specific nodes, the algorithm will return early as soon as the end node is visited, reducing computation time in some cases.

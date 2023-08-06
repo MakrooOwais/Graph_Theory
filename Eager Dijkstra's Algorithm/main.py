@@ -1,14 +1,15 @@
-def lazyDejkstras(graph: dict, start: int):
+def eagerDejkstras(graph: dict, start: int):
     results = {i: float("inf") for i in graph.keys()}
-    visited = set()
-    prev = {i: None for i in graph.keys()}
     results[start] = 0
 
-    priority_q = [[start, 0]]
+    visited = set()
+    prev = {i: None for i in graph.keys()}
+
+    priority_q = {start: 0}
 
     while len(priority_q) != 0:
-        node = min(priority_q, key=lambda n: n[1])
-        priority_q.remove(node)
+        node = min(priority_q.items(), key=lambda n: n[1])
+        priority_q.pop(node[0])
         visited.add(node[0])
 
         for neighbor in graph.get(node[0]):
@@ -18,13 +19,13 @@ def lazyDejkstras(graph: dict, start: int):
                 continue
             results[neighbor[0]] = results[node[0]] + neighbor[1]
             prev[neighbor[0]] = node[0]
-            priority_q.append([neighbor[0], results[neighbor[0]]])
+            priority_q[neighbor[0]] = results[neighbor[0]]
 
     return results, prev
 
 
 def findShortestPath(graph: dict, start: int, end: int):
-    n_steps, prev = lazyDejkstras(graph, start)
+    n_steps, prev = eagerDejkstras(graph, start)
     path = []
     if n_steps[end] == float("inf"):
         return path
@@ -51,11 +52,11 @@ graph_2 = {
 }
 
 if __name__ == "__main__":
-    results = lazyDejkstras(graph_1, 0)
+    results = eagerDejkstras(graph_1, 0)
     path = findShortestPath(graph_1, 0, 4)
     print(results)
     print(path)
-    results = lazyDejkstras(graph_2, 0)
+    results = eagerDejkstras(graph_2, 0)
     path = findShortestPath(graph_2, 0, 5)
     print(results)
     print(path)
