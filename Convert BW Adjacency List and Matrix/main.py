@@ -19,8 +19,6 @@ def list2matrix(graph_list: dict):
     for i in range(n):
         graph_matrix[i][i] = 0
 
-    
-
     for i in node_names:
         for j in graph_list[i]:
             i_ = node_names.index(i)
