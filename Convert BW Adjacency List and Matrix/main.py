@@ -12,18 +12,19 @@ def matrix2list(graph_matrix: list, node_num: dict):
 
 
 def list2matrix(graph_list: dict):
-    n = len(graph_list.keys())
+    node_names = list(graph_list.keys())
+    n = len(node_names)
 
     graph_matrix = [[float("inf") for i in range(n)] for j in range(n)]
     for i in range(n):
         graph_matrix[i][i] = 0
 
-    node_num = list(graph_list.keys())
+    
 
-    for i in graph_list.keys():
+    for i in node_names:
         for j in graph_list[i]:
-            i_ = node_num.index(i)
-            j_ = node_num.index(j[0])
+            i_ = node_names.index(i)
+            j_ = node_names.index(j[0])
             graph_matrix[i_][j_] = j[1]
 
     return graph_matrix
