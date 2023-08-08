@@ -1,4 +1,4 @@
-def detectNegativeCycles(memo, next_node, n):
+def detectNegativeCycles(memo: list, next_node: list, n: int):
     # This function is used to detect negative cycles in the given graph using Floyd-Warshall algorithm.
     # It takes the memo table, the "next_node" table, and the number of nodes in the graph as inputs.
     for k in range(n):
@@ -14,7 +14,7 @@ def detectNegativeCycles(memo, next_node, n):
     return memo, next_node
 
 
-def reconstructPath(memo, next_node, start, end, node_num):
+def reconstructPath(memo: list, next_node: list, start: int, end: int, node_num: dict):
     # This function is used to reconstruct the path between two nodes (start and end) in the graph.
     path = []
 
@@ -38,7 +38,7 @@ def reconstructPath(memo, next_node, start, end, node_num):
     return path
 
 
-def floydWarshall(graph: list, detectNegativeCycles_B = True):
+def floydWarshall(graph: list, detectNegativeCycles_B: bool = True):
     # This function implements the Floyd-Warshall algorithm to find the shortest paths between all pairs of nodes in the graph.
     n = len(graph)
     memo = [[None for i in range(n)] for j in range(n)]
@@ -51,9 +51,6 @@ def floydWarshall(graph: list, detectNegativeCycles_B = True):
             memo[i][j] = graph[i][j]
             if memo[i][j] != float("inf"):
                 next_node[i][j] = j
-
-
-            
 
     # Floyd-Warshall algorithm's main loop to find the shortest paths.
     for k in range(n):
