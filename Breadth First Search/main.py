@@ -1,17 +1,25 @@
-from collections import deque
+from graph import Graph
 
 
-def breadth_first_search(graph: dict, start: str):
-    queue = deque()
+def breadth_first_search(graph: Graph, start: str):
+    queue = []
     queue.append(start)
 
     while len(queue) > 0:
-        current = queue.popleft()
-        print(current)
-        for neighbor in graph.get(current):
-            queue.append(neighbor)
+        node = queue.pop(0)
+        print(node)
+        for edge in graph.getAdjList().get(node):
+            queue.append(edge.to)
 
 
-graph = {"a": ["b", "c"], "b": ["d"], "c": ["e"], "d": ["f"], "e": [], "f": []}
+graph = Graph()
+
+graph.addEdge("a", "b")
+graph.addEdge("a", "c")
+graph.addEdge("b", "d")
+graph.addEdge("c", "e")
+graph.addEdge("d", "f")
 
 breadth_first_search(graph, "a")
+print(graph.getAdjList())
+print(graph.getAdjMat())

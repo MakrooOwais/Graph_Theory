@@ -1,63 +1,45 @@
-# Minimum Spanning Trees (MST) - Problem Statement and Algorithm
+# Lazy Prim's Algorithm - Explanation and Implementation
 
-In graph theory, a **Minimum Spanning Tree (MST)** of a connected, undirected graph is a subgraph that includes all the vertices of the original graph while minimizing the total sum of edge weights. MSTs have applications in various fields, including network design, clustering, and more. One common algorithm to find an MST is **Prim's Algorithm**. The provided Python code implements Prim's Algorithm to find an MST using a lazy approach.
+The provided code implements **Lazy Prim's algorithm** for finding the Minimum Spanning Tree (MST) of a weighted graph. The algorithm works by greedily adding edges of least weight while ensuring that no cycle is formed. Let's dive into the concept of Prim's algorithm, the implementation, and the example usage.
 
-## Problem Statement
+## Prim's Algorithm Concept
 
-Given an undirected graph, the goal of the MST problem is to find a subgraph that connects all vertices while minimizing the sum of edge weights.
+Prim's algorithm grows the MST from an initial vertex by repeatedly adding the cheapest edge that connects the growing tree to an outside vertex. It maintains a set of vertices that are included in the MST and a set of vertices that are not yet included. In each step, it adds the lowest-weight edge that connects a vertex from the included set to a vertex from the excluded set.
 
-### Input
+## Implementation Explanation
 
-- **Graph Representation**: The graph is represented as a dictionary, where each vertex is a key, and its value is a list of tuples containing neighboring vertex and edge weight.
+The provided code contains the following components:
 
-### Output
+-   **Graph Class (`graph`)**: An instance of the custom `Graph` class that contains edges and their weights.
 
-- **Minimum Spanning Tree (MST)**: A list of edges forming the MST and the total cost of the MST.
+-   **`lazyPrimsAlgo` Function**: The main algorithm function. It initializes a priority queue (`priority_q`) to keep track of edges with their weights. It starts with an empty MST and adds edges greedily while ensuring that no cycle is formed.
 
-## Prim's Algorithm
+-   **`addEdges` Function**: A helper function that adds edges connected to a given node to the priority queue.
 
-Prim's Algorithm is a greedy algorithm that starts from an arbitrary vertex and iteratively adds the minimum-weight edge that connects a vertex in the MST to a vertex outside the MST. The lazy version of Prim's Algorithm uses a priority queue to keep track of edges with minimum weights that cross the boundary between the MST and the unvisited vertices.
+## Key Steps of the Algorithm
 
-### Algorithm Steps
+1. **Initialization**: Initialize the priority queue with edges connected to the start vertex (`0` by default).
 
-1. Initialize the priority queue and other necessary variables.
-2. Add the starting vertex to the priority queue.
-3. While the priority queue is not empty and the number of added edges is less than `n - 1` (where `n` is the number of vertices):
-   - Extract the edge with the minimum weight from the priority queue.
-   - If the edge connects a vertex that is already in the MST to a vertex outside the MST, skip it.
-   - Otherwise, add the edge to the MST, increment the edge count, and update the MST's total cost.
-   - Add the neighboring vertices of the new vertex to the priority queue.
+2. **Main Loop**: Iterate while the priority queue is not empty and the number of added edges is less than `n - 1` (where `n` is the number of vertices).
 
-### Implementation Details
+3. **Greedy Edge Selection**: Select the lowest-weight edge from the priority queue. If its destination vertex is already in the MST, skip it to avoid forming a cycle.
 
-The provided Python code implements the lazy Prim's Algorithm using the following functions:
+4. **MST Update**: Add the selected edge to the MST and update the MST's total cost.
 
-- `lazyPrimsAlgo(graph: dict, start: int = 0)`: Finds the MST using lazy Prim's Algorithm.
-- `addEdges(graph: dict, priority_q: list, node: int, visited: set)`: Adds edges to the priority queue during the algorithm's execution.
+5. **Neighbor Exploration**: Add edges connected to the newly added vertex to the priority queue.
 
-## Example
+6. **Termination**: The algorithm terminates when the priority queue is empty or when the MST has `n - 1` edges.
 
-Consider the following graph:
+## Example Usage
 
-```python
-{
-    0: [[1, 10], [2, 1], [3, 4]],
-    1: [[0, 10], [2, 3], [4, 0]],
-    2: [[0, 1], [1, 3], [3, 2], [5, 8]],
-    3: [[0, 4], [2, 2], [5, 2], [6, 7]],
-    4: [[1, 0], [5, 1], [7, 8]],
-    5: [[2, 8], [3, 2], [4, 1], [6, 6], [7, 9]],
-    6: [[3, 7], [5, 6], [7, 12]],
-    7: [[4, 8], [5, 9], [6, 12]],
-}
-```
+The provided example creates a weighted graph using the `Graph` class and adds edges with their weights. Then, the `lazyPrimsAlgo` function is called on this graph to find the minimum cost of the MST and the edges included in it.
 
-The minimum spanning tree for this graph can be found using the `lazyPrimsAlgo` function, resulting in a list of edges forming the MST and the total cost of the MST.
+## Advantages of Lazy Prim's Algorithm
 
-```bash
-    (20, [[0, 2], [2, 3], [3, 5], [5, 4], [4, 1], [5, 6], [4, 7]])
-```
+-   **Greedy Approach**: Prim's algorithm follows a greedy approach, adding the lowest-weight edges first, which leads to the formation of an MST.
+
+-   **Efficiency**: Lazy Prim's algorithm efficiently selects edges using a priority queue, resulting in a time complexity of O(E log V), where E is the number of edges and V is the number of vertices.
 
 ## Conclusion
 
-The Minimum Spanning Tree problem and Prim's Algorithm play a crucial role in optimizing network designs, such as connecting cities with minimal road construction costs or minimizing data transmission costs in communication networks. The lazy approach optimizes the algorithm's efficiency by delaying the consideration of certain edges. The provided code serves as a practical implementation of this algorithm in Python.
+Lazy Prim's algorithm is a powerful tool for finding the minimum spanning tree in a weighted graph. The provided implementation demonstrates the algorithm's core logic and how it can be applied to find the MST's minimum cost and included edges. This approach efficiently constructs the MST by greedily selecting edges based on their weights and ensuring that cycles are not formed.

@@ -1,51 +1,47 @@
-# Eager vs. Lazy Implementation of Prim's Algorithm
+# Eager Prim's Algorithm - Explanation and Implementation
 
-## Introduction
+The provided code implements **Eager Prim's algorithm**, an alternative approach to finding the Minimum Spanning Tree (MST) of a weighted graph. Eager Prim's algorithm is based on maintaining a priority queue (heap) of potential edges and adding the lowest-weight edge that connects the already included vertices to an outside vertex. Let's explore the concept of the algorithm, the implementation, and the example usage.
 
-Prim's algorithm is a fundamental method for determining the Minimum Spanning Tree (MST) of a connected, undirected graph. Two main variants of this algorithm are commonly employed: the eager implementation and the lazy implementation. While both approaches aim to identify the MST, they diverge in their methodologies and efficiency.
+## Prim's Algorithm Concept
 
-## Eager Implementation
+Eager Prim's algorithm is another way to find the MST of a weighted graph. Like the Lazy Prim's algorithm, it grows the MST from an initial vertex, but instead of using a lazy approach, it maintains a priority queue to eagerly add edges with the lowest weight.
 
-The provided code snippet illustrates an eager implementation of Prim's algorithm. Here's a breakdown of its operation:
+## Implementation Explanation
 
-1. **Data Structures**
-    - `priority_q`: A dictionary functioning as a priority queue, associating each destination node with a tuple containing the source node, edge weight, and priority.
-    - `visited`: A set to record visited nodes.
-    - `mst_edges`: An array to store MST edges.
-    - `mst_cost`: Total cost of the MST.
+The provided code contains the following components:
 
-2. **Main Function (`eagerPrimsAlgo`):**
-    - Initializes the priority queue, visited set, edge count, and MST cost.
-    - Initiates the `relaxEdges` function on the starting node to populate the priority queue with its edges.
-    - Continues iterating while the priority queue is not empty and the required number of MST edges hasn't been reached.
-    - Selects the edge with the minimum priority (cost) and its destination node from the priority queue.
-    - Skips the iteration if the destination node is already visited.
-    - Adds the selected edge to `mst_edges`, increments `edge_count`, and updates `mst_cost`.
-    - Calls `relaxEdges` on the destination node to add its edges to the priority queue.
+-   **Graph Class (`graph`)**: An instance of the custom `Graph` class that contains edges and their weights.
 
-3. **`relaxEdges` Function:**
-    - Accepts a node, marks it as visited, and iterates through its edges.
-    - For each edge, if the destination node is unvisited and has a lower priority than its current value (or is absent), updates the priority queue with the new edge information.
+-   **`eagerPrimsAlgo` Function**: The main algorithm function. It initializes a priority queue (`priority_q`) to keep track of potential edges. It starts with an empty MST and adds edges eagerly while ensuring that no cycle is formed.
 
-## Lazy Implementation
+-   **`relaxEdges` Function**: A helper function that updates the priority queue based on the new vertex added to the MST. It compares the weight of the potential edge and updates the queue if the current edge has a lower weight.
 
-The lazy variant of Prim's algorithm distinguishes itself through its approach to maintaining the priority queue. Instead of immediately updating the priority queue upon any change in priority, the lazy method uses a heap-based priority queue and defers updates until necessary. This optimization can lead to improved execution times, particularly for large graphs, by reducing the frequency of priority queue updates.
+## Key Steps of the Algorithm
 
-## Key Differences
+1. **Initialization**: Initialize the priority queue with the start vertex (`0` by default) having a dummy edge with negative infinity weight.
 
-- **Priority Queue Management**
+2. **Main Loop**: Iterate while the priority queue is not empty and the number of added edges is less than `n - 1` (where `n` is the number of vertices).
 
-    - Eager: Maintains the priority queue as a dictionary and updates occur promptly upon changes in priority, possibly leading to increased overhead.
-    - Lazy: Implements the priority queue using a heap-based data structure (like a binary heap or a Fibonacci heap). Updates are postponed until required, decreasing the volume of priority queue operations.
+3. **Eager Edge Selection**: Select the lowest-weight edge from the priority queue. This edge connects a vertex from the MST to a vertex outside the MST.
 
-- **Efficiency**
-    - Eager: Offers a straightforward implementation but may entail more priority queue operations, rendering it less efficient for extensive graphs.
-    - Lazy: Entails a more intricate implementation due to heap management, yet is generally more efficient for larger graphs due to the reduction in priority queue updates.
+4. **Priority Queue Update**: Remove the selected edge from the priority queue.
 
-- **Use Cases**
-    - Eager: Well-suited for graphs of moderate size where the expense of priority queue updates is negligible.
-    - Lazy: Preferred for larger graphs where the reduction in priority queue operations translates to notable performance gains.
+5. **MST Update**: Add the selected edge to the MST and update the MST's total cost.
+
+6. **Neighbor Exploration**: Update the priority queue with edges connected to the newly added vertex.
+
+7. **Termination**: The algorithm terminates when the priority queue is empty or when the MST has `n - 1` edges.
+
+## Example Usage
+
+The provided example creates a weighted graph using the `Graph` class and adds edges with their weights. Then, the `eagerPrimsAlgo` function is called on this graph to find the minimum cost of the MST and the edges included in it.
+
+## Advantages of Eager Prim's Algorithm
+
+-   **Eager Approach**: Eager Prim's algorithm eagerly selects edges based on their weights, potentially reducing the number of edge selections compared to the lazy approach.
+
+-   **Efficiency**: Eager Prim's algorithm efficiently selects edges using a priority queue, resulting in a time complexity similar to that of Lazy Prim's algorithm (O(E log V)).
 
 ## Conclusion
 
-In summary, both eager and lazy implementations of Prim's algorithm present distinct advantages and trade-offs. The eager approach boasts simplicity in implementation, but may falter in efficiency for sizable graphs. On the other hand, the lazy approach necessitates more complex data structures but exhibits enhanced efficiency, particularly for graphs featuring numerous vertices and edges. The selection between these implementations hinges on the graph's dimensions and the desired balance between simplicity and performance.
+Eager Prim's algorithm offers another approach to finding the minimum spanning tree in a weighted graph. The provided implementation demonstrates the algorithm's core logic and how it can be applied to find the MST's minimum cost and included edges. By maintaining a priority queue and eagerly selecting edges with the lowest weights, this algorithm can efficiently construct the MST.

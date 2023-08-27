@@ -1,48 +1,4 @@
-class Edge:
-    def __init__(self, origin, to, flow_capacity, is_residual=False) -> None:
-        self.origin = origin
-        self.to = to
-        self.residual = None
-        self.flow_capacity = flow_capacity
-        self.flow = 0
-        self.is_residual = is_residual
-
-    def setResidual(self, residual):
-        self.residual = residual
-
-    def getRemainingCapacity(self):
-        return self.flow_capacity - self.flow
-
-    def augment(self, bottleneck):
-        self.flow += bottleneck
-        self.residual.flow -= bottleneck
-
-    def __str__(self) -> str:
-        return f"{self.origin} -> {self.to} : {self.flow} / {self.flow_capacity}"
-
-
-class Graph:
-    def __init__(self) -> None:
-        self.edges = {}
-
-    def addEdge(self, origin, to, capacity):
-        if origin not in self.edges.keys():
-            self.edges[origin] = []
-        if to not in self.edges.keys():
-            self.edges[to] = []
-
-        e1 = Edge(origin, to, capacity)
-        e2 = Edge(to, origin, 0, True)
-
-        e1.setResidual(e2)
-        e2.setResidual(e1)
-
-        self.edges[origin].append(e1)
-        self.edges[to].append(e2)
-
-    def getEdges(self) -> dict[int:Edge]:
-        return self.edges
-
+from graph import Graph
 
 SOURCE = 0
 SINK = 10
